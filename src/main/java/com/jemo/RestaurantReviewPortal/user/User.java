@@ -40,5 +40,6 @@ public class User {
     @Column(nullable = false, length = 50)
     @Enumerated(EnumType.STRING)
     private UserRole role;
+    // test
 
 }
