@@ -33,10 +33,6 @@ public class UserService {
             userToUpdate.setUsername(updateUserRequest.username() == null ? userToUpdate.getUsername() : updateUserRequest.username());
             userToUpdate.setPassword(updateUserRequest.password() == null ? userToUpdate.getPassword() : passwordEncoder.encode(updateUserRequest.password()));
             userToUpdate.setEmail(updateUserRequest.email() == null ? userToUpdate.getEmail() : updateUserRequest.email());
-
-//            userToUpdate.setPassword(passwordEncoder.encode(user.getPassword()));
-//            userToUpdate.setUsername(user.getUsername());
-//            userToUpdate.setEmail(user.getEmail());
             userRepository.save(userToUpdate);
             return true;
         }

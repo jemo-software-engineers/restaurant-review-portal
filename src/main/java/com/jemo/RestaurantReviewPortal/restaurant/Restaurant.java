@@ -1,7 +1,5 @@
-package com.jemo.RestaurantReviewPortal.user;
+package com.jemo.RestaurantReviewPortal.restaurant;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
@@ -11,22 +9,30 @@ import org.springframework.lang.NonNull;
 import java.time.LocalDateTime;
 
 @Entity
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
-@Table(name = "user_table")
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id") // help prevent infinite loop
-public class User {
+@Builder
+public class Restaurant {
     @Id
     @GeneratedValue
     private Long id;
 
     @Column(nullable = false, unique = true)
     @NonNull
-    @NotEmpty(message = "username cannot be empty")
-    private String username;
+    @NotEmpty(message = "name cannot be empty")
+    private String name;
+
+    @Column(nullable = false)
+    @NonNull
+    @NotEmpty(message = "address cannot be empty")
+    private String address;
+
+    @Column(nullable = false)
+    @NonNull
+    @NotEmpty(message = "phone cannot be empty")
+    private String phone;
 
     @Email
     @NonNull
@@ -36,12 +42,8 @@ public class User {
 
     @Column(nullable = false)
     @NonNull
-    @NotEmpty(message = "password cannot be empty")
-    private String password;
-
-    @Column(nullable = false, length = 50)
-    @Enumerated(EnumType.STRING)
-    private UserRole role;
+    @NotEmpty(message = "city cannot be empty")
+    private String city;
 
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
