@@ -1,10 +1,11 @@
-package com.jemo.RestaurantReviewPortal.menu;
+package com.jemo.RestaurantReviewPortal.menuitem;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.*;
 import org.springframework.lang.NonNull;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
@@ -13,7 +14,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Menu {
+public class Menuitem {
     @Id
     @GeneratedValue
     private Long id;
@@ -28,7 +29,23 @@ public class Menu {
     @NotEmpty(message = "description cannot be empty")
     private String description;
 
-    private Long restaurantId;
+    @Column(nullable = false)
+    @NonNull
+    private BigDecimal price;
+
+    @Column(nullable = false)
+    @NonNull
+    private Long menuId;
+
+    @Column(nullable = false)
+    @NonNull
+    @Enumerated(EnumType.STRING)
+    private Availability availability;
+
+    @Column(nullable = false)
+    @NonNull
+    @NotEmpty(message = "dietary info cannot be empty")
+    private String dietaryInfo;
 
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;

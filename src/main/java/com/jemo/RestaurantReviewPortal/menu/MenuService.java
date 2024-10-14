@@ -2,6 +2,7 @@ package com.jemo.RestaurantReviewPortal.menu;
 
 import com.jemo.RestaurantReviewPortal.restaurant.Restaurant;
 import com.jemo.RestaurantReviewPortal.restaurant.RestaurantRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -25,15 +26,21 @@ public class MenuService {
         return menuRepository.findAllByRestaurantId(restaurantId);
     }
 
+    @Transactional
     public Boolean deleteById(Long restaurantId, Long menuId) {
         Menu menu = findMenuByRestaurantIdAndMenuId(restaurantId, menuId);
-        menuRepository.delete(menu);
+        if(menu != null) {
+            menuRepository.delete(menu);
+        }
+
+        // confirm deletion
         if(findMenuByRestaurantIdAndMenuId(restaurantId, menuId) == null) {
             return true;
         }
         return false;
     }
 
+    @Transactional
     public Boolean updateById(Long restaurantId, Long menuId, MenuRequest menuRequest) {
         Menu menu = findMenuByRestaurantIdAndMenuId(restaurantId, menuId);
         if(menu.getId() != null) {
@@ -49,6 +56,7 @@ public class MenuService {
         return false;
     }
 
+    @Transactional
     public Boolean createMenu(Long restaurantId, MenuRequest menuRequest) {
         // check if menu exists
         Menu menuExists = menuRepository.findByRestaurantIdAndName(restaurantId, menuRequest.name());

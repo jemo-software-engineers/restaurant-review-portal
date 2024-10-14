@@ -49,7 +49,7 @@ public class AuthController {
 
         User createUser = User.builder()
                 .role(UserRole.CUSTOMER)
-                .email(registerRequest.email())
+                .email(registerRequest.email().toLowerCase())
                 .username(registerRequest.username().toLowerCase())
                 .password(passwordEncoder.encode(registerRequest.password()))
                 .build();

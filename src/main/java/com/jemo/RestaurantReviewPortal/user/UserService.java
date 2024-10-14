@@ -30,9 +30,9 @@ public class UserService {
     public boolean updateUser(Long id, UpdateUserRequest updateUserRequest) {
         User userToUpdate = this.findUserById(id);
         if(userToUpdate != null) {
-            userToUpdate.setUsername(updateUserRequest.username() == null ? userToUpdate.getUsername() : updateUserRequest.username());
+            userToUpdate.setUsername(updateUserRequest.username() == null ? userToUpdate.getUsername() : updateUserRequest.username().toLowerCase());
             userToUpdate.setPassword(updateUserRequest.password() == null ? userToUpdate.getPassword() : passwordEncoder.encode(updateUserRequest.password()));
-            userToUpdate.setEmail(updateUserRequest.email() == null ? userToUpdate.getEmail() : updateUserRequest.email());
+            userToUpdate.setEmail(updateUserRequest.email() == null ? userToUpdate.getEmail() : updateUserRequest.email().toLowerCase());
             userRepository.save(userToUpdate);
             return true;
         }
