@@ -1,5 +1,6 @@
 package com.jemo.RestaurantReviewPortal.restaurant;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -10,6 +11,7 @@ import java.util.List;
 public class RestaurantService {
     private final RestaurantRepository restaurantRepository;
 
+    @Transactional
     public boolean createRestaurant(RestaurantRequest restaurantRequest) {
         Restaurant restaurantExists = restaurantRepository.findByEmail(restaurantRequest.email());
         if (restaurantExists != null) {
@@ -40,6 +42,7 @@ public class RestaurantService {
         return restaurantRepository.findAll();
     }
 
+    @Transactional
     public Boolean deleteById(long id) {
         Restaurant restaurant = findById(id);
         if (restaurant != null) {
@@ -49,6 +52,7 @@ public class RestaurantService {
         return false;
     }
 
+    @Transactional
     public Boolean updateById(long id, RestaurantRequest restaurantRequest) {
         Restaurant restaurant = findById(id);
         if(restaurant != null) {

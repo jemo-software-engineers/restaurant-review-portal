@@ -1,5 +1,6 @@
 package com.jemo.RestaurantReviewPortal.menu;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,7 +31,8 @@ public class MenuController {
         menuResponse.setId(menuItem.getId());
         menuResponse.setName(menuItem.getName());
         menuResponse.setDescription(menuItem.getDescription());
-        menuResponse.setRestaurantId(menuItem.getRestaurantId());
+        menuResponse.setRestaurantId(menuItem.getRestaurant().getId());
+        menuResponse.setRestaurantName(menuItem.getRestaurant().getName());
         return new ResponseEntity<>(menuResponse, HttpStatus.OK);
     }
 
@@ -46,7 +48,7 @@ public class MenuController {
 
     // create a new menu for a restaurant
     @PostMapping("/admin/api/restaurants/{restaurantId}/menus")
-    public ResponseEntity<String> createMenu(@PathVariable Long restaurantId, @RequestBody MenuRequest menuRequest) {
+    public ResponseEntity<String> createMenu(@PathVariable Long restaurantId, @Valid @RequestBody MenuRequest menuRequest) {
         Boolean created = menuService.createMenu(restaurantId, menuRequest);
         if (created) {
             return new ResponseEntity<>("Menu has been created", HttpStatus.OK);
@@ -57,12 +59,12 @@ public class MenuController {
 
     // update a particular menu
     @PutMapping("/admin/api/restaurants/{restaurantId}/menus/{menuId}")
-    public ResponseEntity<String> updateMenu(@RequestBody MenuRequest menuRequest, @PathVariable Long restaurantId, @PathVariable Long menuId) {
+    public ResponseEntity<String> updateMenu(@Valid @RequestBody MenuRequest menuRequest, @PathVariable Long restaurantId, @PathVariable Long menuId) {
         Boolean updated = menuService.updateById(restaurantId, menuId, menuRequest);
         if (updated) {
-            return new ResponseEntity<>("Menu" + menuId + " has been updated", HttpStatus.OK);
+            return new ResponseEntity<>("Menu " + menuId + " has been updated", HttpStatus.OK);
         }
-        return new ResponseEntity<>("Menu" + menuId + " has not been updated", HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>("Menu " + menuId + " could not been updated", HttpStatus.BAD_REQUEST);
     }
 
     // delete a particular menu
@@ -70,9 +72,9 @@ public class MenuController {
     public ResponseEntity<String> deleteMenu(@PathVariable Long restaurantId, @PathVariable Long menuId) {
         Boolean deleted = menuService.deleteById(restaurantId, menuId);
         if (deleted) {
-            return new ResponseEntity<>("Menu" + menuId + " has been deleted", HttpStatus.OK);
+            return new ResponseEntity<>("Menu " + menuId + " has been deleted", HttpStatus.OK);
         }
-       return new ResponseEntity<>("Menu " + menuId + " has not been deleted", HttpStatus.BAD_REQUEST);
+       return new ResponseEntity<>("Menu " + menuId + " could not been deleted", HttpStatus.BAD_REQUEST);
     }
 
 
@@ -85,7 +87,8 @@ public class MenuController {
                     menuResponse.setId(menu.getId());
                     menuResponse.setName(menu.getName());
                     menuResponse.setDescription(menu.getDescription());
-                    menuResponse.setRestaurantId(menu.getRestaurantId());
+                    menuResponse.setRestaurantId(menu.getRestaurant().getId());
+                    menuResponse.setRestaurantName(menu.getRestaurant().getName());
                     return menuResponse;
                 }).toList();
         return new ResponseEntity<>(menuResponseList, HttpStatus.OK);

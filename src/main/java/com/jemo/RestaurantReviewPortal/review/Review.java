@@ -1,16 +1,15 @@
-package com.jemo.RestaurantReviewPortal.menu;
+package com.jemo.RestaurantReviewPortal.review;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.jemo.RestaurantReviewPortal.menuitem.Menuitem;
 import com.jemo.RestaurantReviewPortal.restaurant.Restaurant;
+import com.jemo.RestaurantReviewPortal.user.User;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.*;
 import org.springframework.lang.NonNull;
+import org.springframework.lang.Nullable;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Entity
 @Getter
@@ -18,31 +17,40 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
-public class Menu {
+public class Review {
+
     @Id
     @GeneratedValue
     private Long id;
 
     @Column(nullable = false)
     @NonNull
-    @NotEmpty(message = "name cannot be empty")
-    private String name;
-
-    @Column(nullable = false)
-    @NonNull
-    @NotEmpty(message = "description cannot be empty")
-    private String description;
+    @NotEmpty(message = "address cannot be empty")
+    private String reviewText;
 
     @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    @ManyToOne
+    @Nullable
     @JoinColumn(name = "restaurant_id")
     private Restaurant restaurant;
 
+    @ManyToOne
+    @Nullable
+    @JoinColumn(name = "menuitem_id")
+    private Menuitem menuitem;
+
+//    private int rating;
+
+    @Column(nullable = false)
+    @NonNull
+    @Enumerated(EnumType.STRING)
+    private ReviewStatus status;
+
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
-
-    @OneToMany(mappedBy = "menu")
-    private List<Menuitem> menuitems;
 
     @PrePersist
     protected void onCreate() {

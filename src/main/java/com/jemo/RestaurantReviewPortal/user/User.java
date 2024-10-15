@@ -2,6 +2,7 @@ package com.jemo.RestaurantReviewPortal.user;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.jemo.RestaurantReviewPortal.review.Review;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
@@ -9,6 +10,7 @@ import lombok.*;
 import org.springframework.lang.NonNull;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Builder
@@ -38,6 +40,9 @@ public class User {
     @NonNull
     @NotEmpty(message = "password cannot be empty")
     private String password;
+
+    @OneToMany(mappedBy = "user")
+    private List<Review> reviews;
 
     @Column(nullable = false, length = 50)
     @Enumerated(EnumType.STRING)

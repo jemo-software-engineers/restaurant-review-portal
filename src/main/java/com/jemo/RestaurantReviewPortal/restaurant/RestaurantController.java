@@ -1,5 +1,6 @@
 package com.jemo.RestaurantReviewPortal.restaurant;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,7 +15,7 @@ public class RestaurantController {
 
     // create restaurant - admin
     @PostMapping("/admin/api/restaurants")
-    public ResponseEntity<String> createRestaurant(@RequestBody RestaurantRequest restaurantRequest) {
+    public ResponseEntity<String> createRestaurant(@Valid @RequestBody RestaurantRequest restaurantRequest) {
         Restaurant duplicateRestaurant = restaurantService.findByName(restaurantRequest.name());
         if(duplicateRestaurant != null) {
             return new ResponseEntity<>("Restaurant Creation Failed - Restaurant already exists", HttpStatus.BAD_REQUEST);
@@ -68,7 +69,7 @@ public class RestaurantController {
 
     // update restaurant - admin
     @PutMapping("/admin/api/restaurants/{id}")
-    public ResponseEntity<String> updateRestaurant(@PathVariable long id, @RequestBody RestaurantRequest restaurantRequest) {
+    public ResponseEntity<String> updateRestaurant(@PathVariable long id, @Valid @RequestBody RestaurantRequest restaurantRequest) {
         Boolean updated = restaurantService.updateById(id, restaurantRequest);
         if(updated) {
             return new ResponseEntity<>("Restaurant Updated Successfully", HttpStatus.OK);
