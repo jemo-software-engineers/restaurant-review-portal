@@ -31,7 +31,8 @@ public class MenuitemController {
         menuitemResponse.setId(menuItem.getId());
         menuitemResponse.setName(menuItem.getName());
         menuitemResponse.setDescription(menuItem.getDescription());
-        menuitemResponse.setMenuId(menuItem.getMenuId());
+        menuitemResponse.setMenuId(menuItem.getMenu().getId());
+        menuitemResponse.setMenuName(menuItem.getMenu().getName());
         menuitemResponse.setPrice(menuItem.getPrice());
         menuitemResponse.setDietaryInfo(menuItem.getDietaryInfo());
         menuitemResponse.setAvailability(menuItem.getAvailability());
@@ -92,7 +93,8 @@ public class MenuitemController {
                     menuitemResponse.setAvailability(menuitem.getAvailability());
                     menuitemResponse.setPrice(menuitem.getPrice());
                     menuitemResponse.setDietaryInfo(menuitem.getDietaryInfo());
-                    menuitemResponse.setMenuId(menuitem.getMenuId());
+                    menuitemResponse.setMenuId(menuitem.getMenu().getId());
+                    menuitemResponse.setMenuName(menuitem.getMenu().getName());
                     return menuitemResponse;
                 }).toList();
         return new ResponseEntity<>(menuitemResponseList, HttpStatus.OK);

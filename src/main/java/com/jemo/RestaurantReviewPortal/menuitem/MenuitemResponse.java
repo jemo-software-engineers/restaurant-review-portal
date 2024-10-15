@@ -12,6 +12,7 @@ public class MenuitemResponse {
     private String name;
     private String description;
     private Long menuId;
+    private String menuName;
     private BigDecimal price;
     private Availability availability;
     private String dietaryInfo;

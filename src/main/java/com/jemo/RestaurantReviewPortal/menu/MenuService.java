@@ -46,7 +46,7 @@ public class MenuService {
         if(menu.getId() != null) {
             Menu updatedMenu = Menu.builder()
                     .id(menu.getId())
-                    .restaurantId(menu.getRestaurantId())
+                    .restaurant(menu.getRestaurant())
                     .description(menuRequest.description() != null ? menuRequest.description() : menu.getDescription())
                     .name(menuRequest.name() != null ? menuRequest.name() : menu.getName())
                     .build();
@@ -70,7 +70,7 @@ public class MenuService {
         }
         // create menu
         Menu newMenu = Menu.builder()
-                 .restaurantId(restaurantId)
+                 .restaurant(restaurant)
                  .name(menuRequest.name())
                  .description(menuRequest.description())
                  .build();

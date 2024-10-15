@@ -47,7 +47,7 @@ public class MenuitemService {
                 .description(menuitemRequest.description())
                 .price(menuitemRequest.price())
                 .dietaryInfo(menuitemRequest.dietaryInfo())
-                .menuId(menuId)
+                .menu(menuCheck)
                 .availability(menuitemRequest.availability())
                 .build();
         Menuitem savedMenuitem = menuitemRepository.save(newMenuitem);
@@ -81,7 +81,7 @@ public class MenuitemService {
                     .description(menuitemRequest.description() != null ? menuitemRequest.description() : menuitem.getDescription())
                     .price(menuitemRequest.price() != null ? menuitemRequest.price() : menuitem.getPrice())
                     .availability(menuitemRequest.availability() != null ? menuitemRequest.availability() : menuitem.getAvailability())
-                    .menuId(menuId)
+                    .menu(menuitem.getMenu())
                     .dietaryInfo(menuitemRequest.dietaryInfo() != null ? menuitemRequest.dietaryInfo() : menuitem.getDietaryInfo())
                     .build();
             menuitemRepository.save(updatedMenuitem);

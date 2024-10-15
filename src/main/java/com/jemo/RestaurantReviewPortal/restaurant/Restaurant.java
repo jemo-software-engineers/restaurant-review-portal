@@ -1,5 +1,9 @@
 package com.jemo.RestaurantReviewPortal.restaurant;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.jemo.RestaurantReviewPortal.menu.Menu;
+import com.jemo.RestaurantReviewPortal.review.Review;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
@@ -7,6 +11,7 @@ import lombok.*;
 import org.springframework.lang.NonNull;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @NoArgsConstructor
@@ -14,6 +19,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @Builder
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Restaurant {
     @Id
     @GeneratedValue
@@ -47,6 +53,12 @@ public class Restaurant {
 
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
+
+    @OneToMany(mappedBy = "restaurant")
+    private List<Menu> menus;
+
+    @OneToMany(mappedBy = "restaurant")
+    private List<Review> reviews;
 
     @PrePersist
     protected void onCreate() {
