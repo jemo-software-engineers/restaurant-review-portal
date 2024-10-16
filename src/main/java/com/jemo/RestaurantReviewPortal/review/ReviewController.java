@@ -157,6 +157,38 @@ public class ReviewController {
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
+    // Get a list of all pending reviews due for approval
+    @GetMapping("/admin/api/reviews")
+    public ResponseEntity<List<ReviewResponse>> getAllPendingReviews() {
+        List<Review> reviews = reviewService.findAllByPendingStatus();
+
+        return convertReviewListToReviewResponseList(reviews);
+    }
+
+    // Approve Review Decision For ADMIN
+    @PutMapping("/admin/api/reviews/{reviewId}/approve")
+    public ResponseEntity<String> approveReview(@AuthenticationPrincipal UserDetails userDetails, @PathVariable Long reviewId) {
+        User authenticatedUser = userService.findByUsername(userDetails.getUsername());
+        Boolean approved = reviewService.approveReview(reviewId, authenticatedUser);
+        if(approved) {
+            return new ResponseEntity<>("Review Approved Successfully", HttpStatus.OK);
+        }
+        return new ResponseEntity<>("Review Approved Failed", HttpStatus.BAD_REQUEST);
+    }
+
+    // Reject Review Decision For ADMIN
+    @PutMapping("/admin/api/reviews/{reviewId}/reject")
+    public ResponseEntity<String> rejectReview(@AuthenticationPrincipal UserDetails userDetails, @PathVariable Long reviewId) {
+        User authenticatedUser = userService.findByUsername(userDetails.getUsername());
+        Boolean rejected = reviewService.rejectReview(reviewId, authenticatedUser);
+        if(rejected) {
+            return new ResponseEntity<>("Review Rejected Successfully", HttpStatus.OK);
+        }
+        return new ResponseEntity<>("Review Rejection Failed", HttpStatus.BAD_REQUEST);
+    }
+
+
+
 
 
 

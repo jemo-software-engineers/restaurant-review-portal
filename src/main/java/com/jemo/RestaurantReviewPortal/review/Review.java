@@ -49,6 +49,13 @@ public class Review {
     @Enumerated(EnumType.STRING)
     private ReviewStatus status;
 
+    // review approved by
+    @ManyToOne
+    @Nullable
+    @JoinColumn(name = "approved_by_admin_id")
+    private User approved_by;
+
+
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
