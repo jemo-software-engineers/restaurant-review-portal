@@ -16,11 +16,11 @@ public class ReviewService {
     private final ReviewRepository reviewRepository;
 
     public List<Review> findAllByRestaurantId(Long restaurantId) {
-        return reviewRepository.findAllByRestaurantId(restaurantId);
+        return reviewRepository.findAllByRestaurantIdAndStatus(restaurantId, ReviewStatus.valueOf("APPROVED"));
     }
 
     public List<Review> findAllByMenuitemId(Long menuitemId) {
-        return reviewRepository.findAllByMenuitemId(menuitemId);
+        return reviewRepository.findAllByMenuitemIdAndStatus(menuitemId, ReviewStatus.valueOf("APPROVED"));
     }
 
     public Review findByRestaurantIdAndId(Long restaurantId, Long reviewId) {
@@ -101,4 +101,31 @@ public class ReviewService {
     }
 
 
+    public List<Review> findAllByPendingStatus() {
+        return reviewRepository.findAllByStatus(ReviewStatus.PENDING);
+    }
+
+
+    public Boolean approveReview(Long reviewId, User user) {
+        Review review = findById(reviewId);
+        if (review != null) {
+            review.setStatus(ReviewStatus.APPROVED);
+            review.setApproved_by(user);
+            reviewRepository.save(review);
+            return true;
+        }
+        return false;
+    }
+
+    public Boolean rejectReview(Long reviewId, User user) {
+        Review review = findById(reviewId);
+        if (review != null) {
+            review.setStatus(ReviewStatus.REJECTED);
+            review.setApproved_by(user);
+
+            reviewRepository.save(review);
+            return true;
+        }
+        return false;
+    }
 }
