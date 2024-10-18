@@ -67,4 +67,14 @@ public class RestaurantService {
         }
         return false;
     }
+
+    public Boolean updateRestaurantRating(Long restaurantId, Double averageRating) {
+        Restaurant restaurant = findById(restaurantId);
+        if(restaurant != null) {
+            restaurant.setAverageRating(averageRating);
+            restaurantRepository.save(restaurant);
+            return true;
+        }
+        return false;
+    }
 }

@@ -43,6 +43,7 @@ public class RestaurantController {
         restaurantResponse.setRestaurantCity(restaurantRetrieved.getCity());
         restaurantResponse.setRestaurantEmail(restaurantRetrieved.getEmail());
         restaurantResponse.setRestaurantPhone(restaurantRetrieved.getPhone());
+        restaurantResponse.setAverageRating(restaurantRetrieved.getAverageRating());
 
         return new ResponseEntity<>(restaurantResponse, HttpStatus.OK);
     }
@@ -61,6 +62,7 @@ public class RestaurantController {
                     restaurantResponse.setRestaurantCity(restaurant.getCity());
                     restaurantResponse.setRestaurantEmail(restaurant.getEmail());
                     restaurantResponse.setRestaurantPhone(restaurant.getPhone());
+                    restaurantResponse.setAverageRating(restaurant.getAverageRating());
                     return restaurantResponse;
                 }).toList();
 

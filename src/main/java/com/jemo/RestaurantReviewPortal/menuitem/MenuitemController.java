@@ -36,6 +36,7 @@ public class MenuitemController {
         menuitemResponse.setPrice(menuItem.getPrice());
         menuitemResponse.setDietaryInfo(menuItem.getDietaryInfo());
         menuitemResponse.setAvailability(menuItem.getAvailability());
+        menuitemResponse.setAverageRating(menuItem.getAverageRating());
         return new ResponseEntity<>(menuitemResponse, HttpStatus.OK);
     }
 
@@ -95,6 +96,7 @@ public class MenuitemController {
                     menuitemResponse.setDietaryInfo(menuitem.getDietaryInfo());
                     menuitemResponse.setMenuId(menuitem.getMenu().getId());
                     menuitemResponse.setMenuName(menuitem.getMenu().getName());
+                    menuitemResponse.setAverageRating(menuitem.getAverageRating());
                     return menuitemResponse;
                 }).toList();
         return new ResponseEntity<>(menuitemResponseList, HttpStatus.OK);

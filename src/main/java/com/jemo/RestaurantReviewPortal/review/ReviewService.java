@@ -1,6 +1,7 @@
 package com.jemo.RestaurantReviewPortal.review;
 
 import com.jemo.RestaurantReviewPortal.menuitem.Menuitem;
+import com.jemo.RestaurantReviewPortal.rating.RatingService;
 import com.jemo.RestaurantReviewPortal.restaurant.Restaurant;
 import com.jemo.RestaurantReviewPortal.user.User;
 import jakarta.transaction.Transactional;
@@ -14,6 +15,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ReviewService {
     private final ReviewRepository reviewRepository;
+    private final RatingService ratingService;
 
     public List<Review> findAllByRestaurantId(Long restaurantId) {
         return reviewRepository.findAllByRestaurantIdAndStatus(restaurantId, ReviewStatus.valueOf("APPROVED"));
@@ -46,29 +48,35 @@ public class ReviewService {
     }
 
     @Transactional
-    public Boolean updateById(Long reviewId, @Valid ReviewRequest reviewRequest) {
+    public Review updateById(Long reviewId, @Valid ReviewRequest reviewRequest) {
         Review review = findById(reviewId);
         if (review != null) {
             Review newReview = Review.builder()
                     .id(reviewId)
                     .restaurant(review.getRestaurant())
                     .user(review.getUser())
-                    .reviewText(reviewRequest.reviewText())
+                    .reviewText(reviewRequest.reviewText() != null ? reviewRequest.reviewText() : review.getReviewText())
                     .menuitem(review.getMenuitem())
+                    .rating(review.getRating())
                     .status(ReviewStatus.valueOf("PENDING"))
+                    .createdAt(review.getCreatedAt())
                     .build();
-            reviewRepository.save(newReview);
-            return true;
+            return reviewRepository.save(newReview);
+//            Boolean ratingUpdated = ratingService.updateRatingForReview(review, reviewRequest);
+//            if(ratingUpdated) {
+//                return true;
+//            }
         }
-        return false;
+        return null;
     }
 
     @Transactional
-    public Boolean createReviewForRestaurant(Restaurant restaurant, @Valid ReviewRequest reviewRequest, User authenticatedUser) {
+    public Review createReviewForRestaurant(Restaurant restaurant, @Valid ReviewRequest reviewRequest, User authenticatedUser) {
         // User cannot leave multiple reviews for a single restaurant. They can only update the initial review
+        System.out.println("Got to the createReviewForRestaurant method");
         Review review = reviewRepository.findByRestaurantIdAndUserId(restaurant.getId(), authenticatedUser.getId());
         if(review != null) {
-            return false;
+            return null;
         }
 
         Review reviewToCreate = Review.builder()
@@ -78,15 +86,14 @@ public class ReviewService {
                 .status(ReviewStatus.valueOf("PENDING"))
                 .restaurant(restaurant)
                 .build();
-        Review newReview = reviewRepository.save(reviewToCreate);
-        return newReview.getId() != null ? true : false;
+        return reviewRepository.save(reviewToCreate);
     }
 
-    public Boolean createReviewForMenuitem(Menuitem menuitem, @Valid ReviewRequest reviewRequest, User authenticatedUser) {
+    public Review createReviewForMenuitem(Menuitem menuitem, @Valid ReviewRequest reviewRequest, User authenticatedUser) {
         // User cannot leave multiple reviews for a single menuitem. They can only update the initial review
         Review review = reviewRepository.findByMenuitemIdAndUserId(menuitem.getId(), authenticatedUser.getId());
         if(review != null) {
-            return false;
+            return null;
         }
 
         Review reviewToCreate = Review.builder()
@@ -96,8 +103,8 @@ public class ReviewService {
                 .status(ReviewStatus.valueOf("PENDING"))
                 .restaurant(null)
                 .build();
-        Review newReview = reviewRepository.save(reviewToCreate);
-        return newReview.getId() != null ? true : false;
+        return reviewRepository.save(reviewToCreate);
+
     }
 
 
@@ -106,15 +113,14 @@ public class ReviewService {
     }
 
 
-    public Boolean approveReview(Long reviewId, User user) {
+    public Review approveReview(Long reviewId, User user) {
         Review review = findById(reviewId);
         if (review != null) {
             review.setStatus(ReviewStatus.APPROVED);
             review.setApproved_by(user);
-            reviewRepository.save(review);
-            return true;
+            return reviewRepository.save(review);
         }
-        return false;
+        return null;
     }
 
     public Boolean rejectReview(Long reviewId, User user) {

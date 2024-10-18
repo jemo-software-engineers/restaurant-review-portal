@@ -1,6 +1,7 @@
 package com.jemo.RestaurantReviewPortal.review;
 
 import com.jemo.RestaurantReviewPortal.menuitem.Menuitem;
+import com.jemo.RestaurantReviewPortal.rating.Rating;
 import com.jemo.RestaurantReviewPortal.restaurant.Restaurant;
 import com.jemo.RestaurantReviewPortal.user.User;
 import jakarta.persistence.*;
@@ -17,6 +18,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@ToString
 public class Review {
 
     @Id
@@ -42,7 +44,8 @@ public class Review {
     @JoinColumn(name = "menuitem_id")
     private Menuitem menuitem;
 
-//    private int rating;
+    @OneToOne(mappedBy = "review", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
+    private Rating rating;
 
     @Column(nullable = false)
     @NonNull

@@ -18,6 +18,12 @@ public class ReviewResponse {
     private String menuitemName;
     private ReviewStatus status;
     private LocalDateTime createdAt;
+    private Double foodQuality;
+    private Double customerService;
+    private Double cleanlinessAndHygiene;
+    private Double ambiance;
+    private Double valueForMoney;
+    private Double overallRating;
 
 
 }
