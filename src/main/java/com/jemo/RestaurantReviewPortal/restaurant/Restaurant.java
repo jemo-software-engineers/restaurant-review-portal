@@ -9,6 +9,7 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.*;
 import org.springframework.lang.NonNull;
+import org.springframework.lang.Nullable;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -59,6 +60,9 @@ public class Restaurant {
 
     @OneToMany(mappedBy = "restaurant")
     private List<Review> reviews;
+
+    @Nullable
+    private Double averageRating;
 
     @PrePersist
     protected void onCreate() {

@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.*;
 import org.springframework.lang.NonNull;
+import org.springframework.lang.Nullable;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -53,6 +54,9 @@ public class Menuitem {
 
     @OneToMany(mappedBy = "menuitem")
     private List<Review> reviews;
+
+    @Nullable
+    private Double averageRating;
 
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;

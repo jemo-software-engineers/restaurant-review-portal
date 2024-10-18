@@ -89,4 +89,18 @@ public class MenuitemService {
         }
         return false;
     }
+
+    public Boolean updateMenuitemRating(Long id, Double averageRating) {
+        Menuitem menuitem = findById(id);
+        if(menuitem != null) {
+            menuitem.setAverageRating(averageRating);
+            menuitemRepository.save(menuitem);
+            return true;
+        }
+        return false;
+    }
+
+    private Menuitem findById(Long id) {
+        return menuitemRepository.findById(id).orElse(null);
+    }
 }

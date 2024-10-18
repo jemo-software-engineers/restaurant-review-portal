@@ -16,4 +16,5 @@ public class MenuitemResponse {
     private BigDecimal price;
     private Availability availability;
     private String dietaryInfo;
+    private Double averageRating;
 }
