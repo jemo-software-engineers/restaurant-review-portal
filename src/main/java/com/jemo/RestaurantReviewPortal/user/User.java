@@ -2,6 +2,7 @@ package com.jemo.RestaurantReviewPortal.user;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.jemo.RestaurantReviewPortal.comment.Comment;
 import com.jemo.RestaurantReviewPortal.review.Review;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
@@ -43,6 +44,9 @@ public class User {
 
     @OneToMany(mappedBy = "user")
     private List<Review> reviews;
+
+    @OneToMany(mappedBy = "user")
+    private List<Comment> comments;
 
     @Column(nullable = false, length = 50)
     @Enumerated(EnumType.STRING)

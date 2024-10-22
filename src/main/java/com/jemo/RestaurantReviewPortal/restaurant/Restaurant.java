@@ -61,6 +61,8 @@ public class Restaurant {
     @OneToMany(mappedBy = "restaurant")
     private List<Review> reviews;
 
+    // private RestaurantCategory restaurantCategory;   // work on this later
+
     @Nullable
     private Double averageRating;
 

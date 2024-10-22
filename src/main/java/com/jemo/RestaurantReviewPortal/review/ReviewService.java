@@ -73,7 +73,6 @@ public class ReviewService {
     @Transactional
     public Review createReviewForRestaurant(Restaurant restaurant, @Valid ReviewRequest reviewRequest, User authenticatedUser) {
         // User cannot leave multiple reviews for a single restaurant. They can only update the initial review
-        System.out.println("Got to the createReviewForRestaurant method");
         Review review = reviewRepository.findByRestaurantIdAndUserId(restaurant.getId(), authenticatedUser.getId());
         if(review != null) {
             return null;
