@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -53,6 +54,18 @@ public class RestaurantController {
     public ResponseEntity<List<RestaurantResponse>> getAllRestaurants() {
         List<Restaurant> restaurantList = restaurantService.findAll();
 
+        return convertListOfRestaurantsToRestaurantResponse(restaurantList);
+    }
+
+    // search restaurants by name and city
+    @GetMapping("/api/restaurants/search")
+    public ResponseEntity<List<RestaurantResponse>> getRestaurantByNameAndCity(@Nullable @RequestParam String name, @Nullable @RequestParam String city){
+        List<Restaurant> restaurantList = restaurantService.searchRestaurants(name, city);
+
+        return convertListOfRestaurantsToRestaurantResponse(restaurantList);
+    }
+
+    private ResponseEntity<List<RestaurantResponse>> convertListOfRestaurantsToRestaurantResponse(List<Restaurant> restaurantList) {
         List<RestaurantResponse> allRestaurenats = restaurantList.stream()
                 .map(restaurant -> {
                     RestaurantResponse restaurantResponse = new RestaurantResponse();

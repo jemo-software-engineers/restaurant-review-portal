@@ -2,6 +2,7 @@ package com.jemo.RestaurantReviewPortal.restaurant;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -40,6 +41,12 @@ public class RestaurantService {
 
     public List<Restaurant> findAll() {
         return restaurantRepository.findAll();
+    }
+
+    public List<Restaurant> searchRestaurants(String name, String city) {
+        Specification<Restaurant> spec = Specification.where(RestaurantSpecification.hasName(name))
+                .and(RestaurantSpecification.hasCity(city));
+        return restaurantRepository.findAll(spec);
     }
 
     @Transactional
