@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -38,6 +39,15 @@ public class MenuitemController {
         menuitemResponse.setAvailability(menuItem.getAvailability());
         menuitemResponse.setAverageRating(menuItem.getAverageRating());
         return new ResponseEntity<>(menuitemResponse, HttpStatus.OK);
+    }
+
+
+    // search menuitem by name
+    @GetMapping("/api/menuitems/search")
+    public ResponseEntity<List<MenuitemResponse>> getMenuitemByName(@Nullable @RequestParam String name){
+        List<Menuitem> menuitemList = menuitemService.searchMenuitem(name);
+
+        return getMenuitemResponseList(menuitemList);
     }
 
     // retrieve all menuitems for a particular menu

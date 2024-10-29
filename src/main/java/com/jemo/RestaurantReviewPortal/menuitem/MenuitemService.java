@@ -5,6 +5,7 @@ import com.jemo.RestaurantReviewPortal.menu.MenuRepository;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -102,5 +103,10 @@ public class MenuitemService {
 
     private Menuitem findById(Long id) {
         return menuitemRepository.findById(id).orElse(null);
+    }
+
+    public List<Menuitem> searchMenuitem(String name) {
+        Specification<Menuitem> spec = Specification.where(MenuitemSpecification.hasName(name));
+        return menuitemRepository.findAll(spec);
     }
 }
