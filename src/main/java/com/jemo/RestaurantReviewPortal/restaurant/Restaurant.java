@@ -47,6 +47,11 @@ public class Restaurant {
     @Column(nullable = false, unique = true)
     private String email;
 
+    @NonNull
+    @NotEmpty(message = "website cannot be empty")
+    @Column(nullable = false)
+    private String website;
+
     @Column(nullable = false)
     @NonNull
     @NotEmpty(message = "city cannot be empty")
@@ -61,7 +66,10 @@ public class Restaurant {
     @OneToMany(mappedBy = "restaurant")
     private List<Review> reviews;
 
-    // private RestaurantCategory restaurantCategory;   // work on this later
+    @NonNull
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private RestaurantCuisine cuisine;
 
     @Nullable
     private Double averageRating;

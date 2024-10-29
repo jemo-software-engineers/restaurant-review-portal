@@ -12,4 +12,9 @@ public class RestaurantSpecification {
         return (root, query, criteriaBuilder) ->
                 city == null ? null : criteriaBuilder.equal(criteriaBuilder.lower(root.get("city")), city.toLowerCase());
     }
+
+    public static Specification<Restaurant> hasCuisine(String cuisine) {
+        return (root, query, criteriaBuilder) ->
+                cuisine == null ? null : criteriaBuilder.equal(criteriaBuilder.lower(root.get("cuisine")), cuisine.toLowerCase());
+    }
 }

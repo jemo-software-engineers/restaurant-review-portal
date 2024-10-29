@@ -45,6 +45,8 @@ public class RestaurantController {
         restaurantResponse.setRestaurantEmail(restaurantRetrieved.getEmail());
         restaurantResponse.setRestaurantPhone(restaurantRetrieved.getPhone());
         restaurantResponse.setAverageRating(restaurantRetrieved.getAverageRating());
+        restaurantResponse.setWebsite(restaurantRetrieved.getWebsite());
+        restaurantResponse.setCuisine(String.valueOf(restaurantRetrieved.getCuisine()));
 
         return new ResponseEntity<>(restaurantResponse, HttpStatus.OK);
     }
@@ -59,8 +61,8 @@ public class RestaurantController {
 
     // search restaurants by name and city
     @GetMapping("/api/restaurants/search")
-    public ResponseEntity<List<RestaurantResponse>> getRestaurantByNameAndCity(@Nullable @RequestParam String name, @Nullable @RequestParam String city){
-        List<Restaurant> restaurantList = restaurantService.searchRestaurants(name, city);
+    public ResponseEntity<List<RestaurantResponse>> getRestaurantByNameAndCity(@Nullable @RequestParam String name, @Nullable @RequestParam String city, @Nullable @RequestParam String cuisine){
+        List<Restaurant> restaurantList = restaurantService.searchRestaurants(name, city, cuisine);
 
         return convertListOfRestaurantsToRestaurantResponse(restaurantList);
     }
@@ -76,6 +78,8 @@ public class RestaurantController {
                     restaurantResponse.setRestaurantEmail(restaurant.getEmail());
                     restaurantResponse.setRestaurantPhone(restaurant.getPhone());
                     restaurantResponse.setAverageRating(restaurant.getAverageRating());
+                    restaurantResponse.setWebsite(restaurant.getWebsite());
+                    restaurantResponse.setCuisine(String.valueOf(restaurant.getCuisine()));
                     return restaurantResponse;
                 }).toList();
 

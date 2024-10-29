@@ -15,4 +15,6 @@ public class RestaurantResponse {
     private String restaurantEmail;
     private String restaurantCity;
     private Double averageRating;
+    private String website;
+    private String cuisine;
 }

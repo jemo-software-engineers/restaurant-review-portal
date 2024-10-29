@@ -25,6 +25,8 @@ public class RestaurantService {
                 .city(restaurantRequest.city())
                 .phone(restaurantRequest.phone())
                 .email(restaurantRequest.email())
+                .website(restaurantRequest.website())
+                .cuisine(RestaurantCuisine.valueOf(restaurantRequest.cuisine()))
                 .build();
         Restaurant newRestaurant = restaurantRepository.save(restaurantToCreate);
         return (newRestaurant.getId() != null) ? true : false;
@@ -43,9 +45,10 @@ public class RestaurantService {
         return restaurantRepository.findAll();
     }
 
-    public List<Restaurant> searchRestaurants(String name, String city) {
+    public List<Restaurant> searchRestaurants(String name, String city, String cuisine) {
         Specification<Restaurant> spec = Specification.where(RestaurantSpecification.hasName(name))
-                .and(RestaurantSpecification.hasCity(city));
+                .and(RestaurantSpecification.hasCity(city))
+                .and(RestaurantSpecification.hasCuisine(cuisine));
         return restaurantRepository.findAll(spec);
     }
 
@@ -69,6 +72,8 @@ public class RestaurantService {
             restaurant.setEmail(restaurantRequest.email() != null ? restaurantRequest.email() : restaurant.getEmail());
             restaurant.setAddress(restaurantRequest.address() != null ? restaurantRequest.address() : restaurant.getAddress());
             restaurant.setPhone(restaurantRequest.phone() != null ? restaurantRequest.phone() : restaurant.getPhone());
+            restaurant.setWebsite(restaurantRequest.website() != null ? restaurantRequest.website() : restaurant.getWebsite());
+            restaurant.setCuisine(restaurantRequest.cuisine() != null ? RestaurantCuisine.valueOf(restaurantRequest.cuisine()) : restaurant.getCuisine());
             restaurantRepository.save(restaurant);
             return true;
         }

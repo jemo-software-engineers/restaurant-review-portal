@@ -5,5 +5,7 @@ public record RestaurantRequest(
         String address,
         String phone,
         String email,
-        String city
+        String city,
+        String website,
+        String cuisine
 ) {}
