@@ -53,19 +53,16 @@ public class RestaurantController {
 
     // get list of all restaurants - anybody
     @GetMapping("/api/restaurants")
-    public ResponseEntity<List<RestaurantResponse>> getAllRestaurants() {
-        List<Restaurant> restaurantList = restaurantService.findAll();
-
+    public ResponseEntity<List<RestaurantResponse>> getAllRestaurants(@Nullable @RequestParam String name, @Nullable @RequestParam String city, @Nullable @RequestParam String cuisine) {
+        List<Restaurant> restaurantList;
+        if(name != null || city != null || cuisine != null) {
+            restaurantList = restaurantService.searchRestaurants(name, city, cuisine);
+        } else {
+            restaurantList = restaurantService.findAll();
+        }
         return convertListOfRestaurantsToRestaurantResponse(restaurantList);
     }
 
-    // search restaurants by name and city
-    @GetMapping("/api/restaurants/search")
-    public ResponseEntity<List<RestaurantResponse>> getRestaurantByNameAndCity(@Nullable @RequestParam String name, @Nullable @RequestParam String city, @Nullable @RequestParam String cuisine){
-        List<Restaurant> restaurantList = restaurantService.searchRestaurants(name, city, cuisine);
-
-        return convertListOfRestaurantsToRestaurantResponse(restaurantList);
-    }
 
     private ResponseEntity<List<RestaurantResponse>> convertListOfRestaurantsToRestaurantResponse(List<Restaurant> restaurantList) {
         List<RestaurantResponse> allRestaurenats = restaurantList.stream()

@@ -16,8 +16,13 @@ public class MenuitemController {
 
     // retrieve all menuitems
     @GetMapping("/api/menuitems")
-    public ResponseEntity<List<MenuitemResponse>> getAllMenuitems() {
-        List<Menuitem> menuitemList = menuitemService.findAllMenuitems();
+    public ResponseEntity<List<MenuitemResponse>> getAllMenuitems(@Nullable @RequestParam String name) {
+        List<Menuitem> menuitemList;
+        if(name != null) {
+            menuitemList = menuitemService.searchMenuitem(name);
+        } else {
+            menuitemList = menuitemService.findAllMenuitems();
+        }
         return getMenuitemResponseList(menuitemList);
     }
 
@@ -41,14 +46,6 @@ public class MenuitemController {
         return new ResponseEntity<>(menuitemResponse, HttpStatus.OK);
     }
 
-
-    // search menuitem by name
-    @GetMapping("/api/menuitems/search")
-    public ResponseEntity<List<MenuitemResponse>> getMenuitemByName(@Nullable @RequestParam String name){
-        List<Menuitem> menuitemList = menuitemService.searchMenuitem(name);
-
-        return getMenuitemResponseList(menuitemList);
-    }
 
     // retrieve all menuitems for a particular menu
     @GetMapping("/api/menus/{menuId}/menuitems")
