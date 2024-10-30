@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
 import java.util.List;
 
 @RestController
@@ -61,6 +62,16 @@ public class RestaurantController {
             restaurantList = restaurantService.findAll();
         }
         return convertListOfRestaurantsToRestaurantResponse(restaurantList);
+    }
+
+    @GetMapping("/api/cuisine")
+    public ResponseEntity<List<RestaurantCuisine>> getAllCuisine() {
+        return new ResponseEntity(Arrays.asList(RestaurantCuisine.values()), HttpStatus.OK);
+    }
+
+    @GetMapping("/api/cities")
+    public ResponseEntity<List<RestaurantCities>> getAllCities() {
+        return new ResponseEntity(Arrays.asList(RestaurantCities.values()), HttpStatus.OK);
     }
 
 
