@@ -1,5 +1,6 @@
 package com.jemo.RestaurantReviewPortal.menu;
 
+import com.jemo.RestaurantReviewPortal.menuitem.MenuitemResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -17,22 +18,42 @@ public class MenuController {
     @GetMapping("/api/menus")
     public ResponseEntity<List<MenuResponse>> getAllMenus() {
         List<Menu> menuList = menuService.findAllMenus();
+
+
         return getMenuResponseList(menuList);
     }
 
     // retrieve a particular menu
     @GetMapping("/api/restaurants/{restaurantId}/menus/{menuId}")
     public ResponseEntity<MenuResponse> getMenuById(@PathVariable Long restaurantId, @PathVariable Long menuId) {
-        Menu menuItem = menuService.findMenuByRestaurantIdAndMenuId(restaurantId, menuId);
-        if (menuItem == null) {
+        Menu singleMenu = menuService.findMenuByRestaurantIdAndMenuId(restaurantId, menuId);
+        if (singleMenu == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         MenuResponse menuResponse = new MenuResponse();
-        menuResponse.setId(menuItem.getId());
-        menuResponse.setName(menuItem.getName());
-        menuResponse.setDescription(menuItem.getDescription());
-        menuResponse.setRestaurantId(menuItem.getRestaurant().getId());
-        menuResponse.setRestaurantName(menuItem.getRestaurant().getName());
+        menuResponse.setId(singleMenu.getId());
+        menuResponse.setName(singleMenu.getName());
+        menuResponse.setDescription(singleMenu.getDescription());
+        menuResponse.setRestaurantId(singleMenu.getRestaurant().getId());
+        menuResponse.setRestaurantName(singleMenu.getRestaurant().getName());
+
+        // build up the menu item list
+        List<MenuitemResponse> menuitemResponseList =  singleMenu.getMenuitems().stream()
+                        .map(menuitem -> {
+                            MenuitemResponse menuitemResponse = new MenuitemResponse();
+                            menuitemResponse.setId(menuitem.getId());
+                            menuitemResponse.setName(menuitem.getName());
+                            menuitemResponse.setDescription(menuitem.getDescription());
+                            menuitemResponse.setMenuId(menuitem.getMenu().getId());
+                            menuitemResponse.setMenuName(menuitem.getMenu().getName());
+                            menuitemResponse.setPrice(menuitem.getPrice());
+                            menuitemResponse.setAvailability(menuitem.getAvailability());
+                            menuitemResponse.setDietaryInfo(menuitem.getDietaryInfo());
+                            menuitemResponse.setAverageRating(menuitem.getAverageRating());
+                            return menuitemResponse;
+                        })
+                .toList();
+        menuResponse.setMenuitems(menuitemResponseList);
         return new ResponseEntity<>(menuResponse, HttpStatus.OK);
     }
 
@@ -89,8 +110,32 @@ public class MenuController {
                     menuResponse.setDescription(menu.getDescription());
                     menuResponse.setRestaurantId(menu.getRestaurant().getId());
                     menuResponse.setRestaurantName(menu.getRestaurant().getName());
+
+                    // attach menu items to each menu
+
+        List<MenuitemResponse> menuitemResponseList =  menu.getMenuitems().stream()
+                .map(menuitem -> {
+                    MenuitemResponse menuitemResponse = new MenuitemResponse();
+                    menuitemResponse.setId(menuitem.getId());
+                    menuitemResponse.setName(menuitem.getName());
+                    menuitemResponse.setDescription(menuitem.getDescription());
+                    menuitemResponse.setMenuId(menuitem.getMenu().getId());
+                    menuitemResponse.setMenuName(menuitem.getMenu().getName());
+                    menuitemResponse.setPrice(menuitem.getPrice());
+                    menuitemResponse.setAvailability(menuitem.getAvailability());
+                    menuitemResponse.setDietaryInfo(menuitem.getDietaryInfo());
+                    menuitemResponse.setAverageRating(menuitem.getAverageRating());
+                    return menuitemResponse;
+                })
+                .toList();
+
+        menuResponse.setMenuitems(menuitemResponseList);
                     return menuResponse;
                 }).toList();
+
+
+
+
         return new ResponseEntity<>(menuResponseList, HttpStatus.OK);
     }
 
