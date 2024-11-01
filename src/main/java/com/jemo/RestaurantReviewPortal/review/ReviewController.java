@@ -62,6 +62,7 @@ public class ReviewController {
         reviewResponse.setRestaurantId(review.getRestaurant().getId()); // check later. might need to make null
         reviewResponse.setRestaurantName(review.getRestaurant().getName());
         reviewResponse.setReviewText(review.getReviewText());
+        reviewResponse.setReviewTitle(review.getReviewTitle());
         reviewResponse.setAmbiance(review.getRating().getAmbiance());
         reviewResponse.setCleanlinessAndHygiene(review.getRating().getCleanlinessAndHygiene());
         reviewResponse.setCustomerService(review.getRating().getCustomerService());
@@ -89,6 +90,7 @@ public class ReviewController {
         reviewResponse.setMenuitemId(review.getMenuitem().getId());  // check later. might need to make null
         reviewResponse.setMenuitemName(review.getMenuitem().getName());
         reviewResponse.setReviewText(review.getReviewText());
+        reviewResponse.setReviewTitle(review.getReviewTitle());
         reviewResponse.setCleanlinessAndHygiene(review.getRating().getCleanlinessAndHygiene());
         reviewResponse.setCustomerService(review.getRating().getCustomerService());
         reviewResponse.setFoodQuality(review.getRating().getFoodQuality());
@@ -277,6 +279,7 @@ public class ReviewController {
                     reviewResponse.setMenuitemId(review.getMenuitem()  != null ? review.getMenuitem().getId() : null);
                     reviewResponse.setMenuitemName(review.getMenuitem() != null ? review.getMenuitem().getName() : null);
                     reviewResponse.setReviewText(review.getReviewText());
+                    reviewResponse.setReviewTitle(review.getReviewTitle());
                     reviewResponse.setStatus(review.getStatus());
                     reviewResponse.setCreatedAt(review.getCreatedAt());
                     reviewResponse.setAmbiance(review.getRating().getAmbiance());

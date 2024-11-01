@@ -56,6 +56,7 @@ public class ReviewService {
                     .restaurant(review.getRestaurant())
                     .user(review.getUser())
                     .reviewText(reviewRequest.reviewText() != null ? reviewRequest.reviewText() : review.getReviewText())
+                    .reviewTitle(reviewRequest.reviewTitle() != null ? reviewRequest.reviewTitle() : review.getReviewTitle())
                     .menuitem(review.getMenuitem())
                     .rating(review.getRating())
                     .status(ReviewStatus.valueOf("PENDING"))
@@ -79,6 +80,7 @@ public class ReviewService {
         }
 
         Review reviewToCreate = Review.builder()
+                .reviewTitle(reviewRequest.reviewTitle())
                 .reviewText(reviewRequest.reviewText())
                 .user(authenticatedUser)
                 .menuitem(null)
@@ -96,6 +98,7 @@ public class ReviewService {
         }
 
         Review reviewToCreate = Review.builder()
+                .reviewTitle(reviewRequest.reviewTitle())
                 .reviewText(reviewRequest.reviewText())
                 .user(authenticatedUser)
                 .menuitem(menuitem)

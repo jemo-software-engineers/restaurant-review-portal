@@ -27,7 +27,12 @@ public class Review {
 
     @Column(nullable = false)
     @NonNull
-    @NotEmpty(message = "address cannot be empty")
+    @NotEmpty(message = "title cannot be empty")
+    private String reviewTitle;
+
+    @Column(nullable = false)
+    @NonNull
+    @NotEmpty(message = "text cannot be empty")
     private String reviewText;
 
     @ManyToOne
