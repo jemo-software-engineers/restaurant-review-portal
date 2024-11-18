@@ -109,17 +109,21 @@ public class ReviewController {
     @PostMapping("/api/restaurants/{restaurantId}/reviews")
     public ResponseEntity<String> createReviewForRestaurant(@AuthenticationPrincipal UserDetails userDetails, @PathVariable Long restaurantId, @Valid @RequestBody ReviewRequest reviewRequest) {
 
+        System.out.println("Hello");
         User authenticatedUser = userService.findByUsername(userDetails.getUsername());
         Restaurant restaurant = restaurantService.findById(restaurantId);
         if(restaurant == null) {
+            System.out.println("restaurant exists");
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         Review reviewCreated = reviewService.createReviewForRestaurant(restaurant, reviewRequest, authenticatedUser);
 
         if(reviewCreated.getId() != null) {
+            System.out.println("Review created");
             // implement rating
             Boolean rating = addRatingToReview(reviewCreated, reviewRequest);
             if(rating) {
+                System.out.println("rating added");
                 return new ResponseEntity<>("Review Created Successfully", HttpStatus.CREATED);
             }
         }
