@@ -105,7 +105,9 @@ public class ReviewService {
                 .status(ReviewStatus.valueOf("PENDING"))
                 .restaurant(null)
                 .build();
-        return reviewRepository.save(reviewToCreate);
+        Review savedReview = reviewRepository.save(reviewToCreate);
+        System.out.println(savedReview.toString());
+        return savedReview;
 
     }
 

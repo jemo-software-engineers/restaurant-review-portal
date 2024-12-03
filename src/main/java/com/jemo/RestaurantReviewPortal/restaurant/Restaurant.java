@@ -23,7 +23,7 @@ import java.util.List;
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Restaurant {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue
     private Long id;
 
     @Column(nullable = false, unique = true)
@@ -70,6 +70,9 @@ public class Restaurant {
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private RestaurantCuisine cuisine;
+
+    @Column(nullable = true)
+    private String imageUrl;
 
     @Nullable
     private Double averageRating;

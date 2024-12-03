@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Arrays;
 import java.util.List;
@@ -15,14 +16,15 @@ import java.util.List;
 public class RestaurantController {
     private final RestaurantService restaurantService;
 
+
     // create restaurant - admin
     @PostMapping("/admin/api/restaurants")
-    public ResponseEntity<String> createRestaurant(@Valid @RequestBody RestaurantRequest restaurantRequest) {
+    public ResponseEntity<String> createRestaurant(@Valid @RequestPart("restaurantRequest") RestaurantRequest restaurantRequest, @RequestPart("file") MultipartFile file) {
         Restaurant duplicateRestaurant = restaurantService.findByName(restaurantRequest.name());
         if(duplicateRestaurant != null) {
             return new ResponseEntity<>("Restaurant Creation Failed - Restaurant already exists", HttpStatus.BAD_REQUEST);
         }
-        boolean restaurantCreated = restaurantService.createRestaurant(restaurantRequest);
+        boolean restaurantCreated = restaurantService.createRestaurant(restaurantRequest, file);
         if(restaurantCreated) {
             return new ResponseEntity<>("Restaurant Created Successfully", HttpStatus.CREATED);
         }
@@ -47,6 +49,7 @@ public class RestaurantController {
         restaurantResponse.setRestaurantPhone(restaurantRetrieved.getPhone());
         restaurantResponse.setAverageRating(restaurantRetrieved.getAverageRating());
         restaurantResponse.setWebsite(restaurantRetrieved.getWebsite());
+        restaurantResponse.setImageUrl(restaurantRetrieved.getImageUrl());
         restaurantResponse.setCuisine(String.valueOf(restaurantRetrieved.getCuisine()));
 
         return new ResponseEntity<>(restaurantResponse, HttpStatus.OK);
@@ -87,6 +90,7 @@ public class RestaurantController {
                     restaurantResponse.setRestaurantPhone(restaurant.getPhone());
                     restaurantResponse.setAverageRating(restaurant.getAverageRating());
                     restaurantResponse.setWebsite(restaurant.getWebsite());
+                    restaurantResponse.setImageUrl(restaurant.getImageUrl());
                     restaurantResponse.setCuisine(String.valueOf(restaurant.getCuisine()));
                     return restaurantResponse;
                 }).toList();
@@ -96,8 +100,9 @@ public class RestaurantController {
 
     // update restaurant - admin
     @PutMapping("/admin/api/restaurants/{id}")
-    public ResponseEntity<String> updateRestaurant(@PathVariable long id, @Valid @RequestBody RestaurantRequest restaurantRequest) {
-        Boolean updated = restaurantService.updateById(id, restaurantRequest);
+    public ResponseEntity<String> updateRestaurant(@PathVariable long id, @Valid @RequestPart("restaurantRequest") RestaurantRequest restaurantRequest, @Nullable @RequestPart("file") MultipartFile file) {
+//        assert file != null;
+        Boolean updated = (file == null) ? restaurantService.updateById(id, restaurantRequest) : restaurantService.updateById(id, restaurantRequest, file);
         if(updated) {
             return new ResponseEntity<>("Restaurant Updated Successfully", HttpStatus.OK);
         }

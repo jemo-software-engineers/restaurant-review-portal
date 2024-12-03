@@ -14,7 +14,7 @@ import org.springframework.lang.NonNull;
 public class Rating {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue
     private Long id;
 
     @OneToOne

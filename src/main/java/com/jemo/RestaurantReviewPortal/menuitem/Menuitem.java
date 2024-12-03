@@ -20,7 +20,7 @@ import java.util.List;
 @Builder
 public class Menuitem {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue
     private Long id;
 
     @Column(nullable = false)

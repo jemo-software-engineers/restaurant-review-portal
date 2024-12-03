@@ -17,4 +17,5 @@ public class RestaurantResponse {
     private Double averageRating;
     private String website;
     private String cuisine;
+    private String imageUrl;
 }
