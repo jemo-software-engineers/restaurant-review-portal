@@ -30,12 +30,13 @@ public class RestaurantService {
                 .cuisine(RestaurantCuisine.valueOf(restaurantRequest.cuisine()))
                 .build();
         Restaurant newRestaurant = restaurantRepository.save(restaurantToCreate);
+        return true;
 //        if (newRestaurant.getId() != null) {
 //            if (!file.isEmpty()) {
 //                return uploadRestaurantImage(newRestaurant.getId(), file);
 //            }
 //        }
-        return false;
+//        return false;
     }
 
     public Restaurant findById(long id) {

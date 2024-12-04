@@ -94,6 +94,7 @@ public class ReviewService {
         // User cannot leave multiple reviews for a single menuitem. They can only update the initial review
         Review review = reviewRepository.findByMenuitemIdAndUserId(menuitem.getId(), authenticatedUser.getId());
         if(review != null) {
+            System.out.println("Review already exists");
             return null;
         }
 
