@@ -1,11 +1,14 @@
 package com.jemo.RestaurantReviewPortal.restaurant;
 
-import jakarta.validation.Valid;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Arrays;
 import java.util.List;
@@ -16,33 +19,26 @@ public class RestaurantController {
     private final RestaurantService restaurantService;
 
 
+
+
     // create restaurant - admin
-    @PostMapping("/admin/api/restaurants")
-    public ResponseEntity<String> createRestaurant(@RequestBody RestaurantRequest restaurantRequest) {
+    @PostMapping(value = "/admin/api/restaurants", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<String> createRestaurant(
+            @RequestPart("restaurantRequest") String restaurantRequestJson,
+            @RequestPart(value = "file", required = false) MultipartFile file) throws JsonProcessingException {
+        // Convert JSON string to RestaurantRequest object
+        RestaurantRequest restaurantRequest = new ObjectMapper()
+                .readValue(restaurantRequestJson, RestaurantRequest.class);
         Restaurant duplicateRestaurant = restaurantService.findByName(restaurantRequest.name());
         if(duplicateRestaurant != null) {
             return new ResponseEntity<>("Restaurant Creation Failed - Restaurant already exists", HttpStatus.BAD_REQUEST);
         }
-        boolean restaurantCreated = restaurantService.createRestaurant(restaurantRequest);
+        boolean restaurantCreated = restaurantService.createRestaurant(restaurantRequest, file);
         if(restaurantCreated) {
             return new ResponseEntity<>("Restaurant Created Successfully", HttpStatus.CREATED);
         }
         return new ResponseEntity<>("Restaurant Creation Failed", HttpStatus.BAD_REQUEST);
     }
-
-//    // create restaurant - admin
-//    @PostMapping("/admin/api/restaurants")
-//    public ResponseEntity<String> createRestaurant(@Valid @RequestPart("restaurantRequest") RestaurantRequest restaurantRequest, @RequestPart("file") MultipartFile file) {
-//        Restaurant duplicateRestaurant = restaurantService.findByName(restaurantRequest.name());
-//        if(duplicateRestaurant != null) {
-//            return new ResponseEntity<>("Restaurant Creation Failed - Restaurant already exists", HttpStatus.BAD_REQUEST);
-//        }
-//        boolean restaurantCreated = restaurantService.createRestaurant(restaurantRequest, file);
-//        if(restaurantCreated) {
-//            return new ResponseEntity<>("Restaurant Created Successfully", HttpStatus.CREATED);
-//        }
-//        return new ResponseEntity<>("Restaurant Creation Failed", HttpStatus.BAD_REQUEST);
-//    }
 
     // get single restaurant - anybody
     @GetMapping("/api/restaurants/{id}")
@@ -111,27 +107,23 @@ public class RestaurantController {
         return new ResponseEntity<>(allRestaurenats, HttpStatus.OK);
     }
 
+
     // update restaurant - admin
-    @PutMapping("/admin/api/restaurants/{id}")
-    public ResponseEntity<String> updateRestaurant(@PathVariable long id, @Valid @RequestBody RestaurantRequest restaurantRequest) {
-//        assert file != null;
-        Boolean updated = restaurantService.updateById(id, restaurantRequest);
+    @PutMapping(value ="/admin/api/restaurants/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<String> updateRestaurant(
+            @PathVariable long id,
+            @RequestPart("restaurantRequest") String restaurantRequestJson,
+            @RequestPart(value = "file", required = false) MultipartFile file) throws JsonProcessingException {
+        // Convert JSON string to RestaurantRequest object
+        RestaurantRequest restaurantRequest = new ObjectMapper()
+                .readValue(restaurantRequestJson, RestaurantRequest.class);
+
+        Boolean updated = (file == null) ? restaurantService.updateById(id, restaurantRequest) : restaurantService.updateById(id, restaurantRequest, file);
         if(updated) {
             return new ResponseEntity<>("Restaurant Updated Successfully", HttpStatus.OK);
         }
         return new ResponseEntity<>("Restaurant Update Failed", HttpStatus.BAD_REQUEST);
     }
-
-//    // update restaurant - admin
-//    @PutMapping("/admin/api/restaurants/{id}")
-//    public ResponseEntity<String> updateRestaurant(@PathVariable long id, @Valid @RequestPart("restaurantRequest") RestaurantRequest restaurantRequest, @Nullable @RequestPart("file") MultipartFile file) {
-////        assert file != null;
-//        Boolean updated = (file == null) ? restaurantService.updateById(id, restaurantRequest) : restaurantService.updateById(id, restaurantRequest, file);
-//        if(updated) {
-//            return new ResponseEntity<>("Restaurant Updated Successfully", HttpStatus.OK);
-//        }
-//        return new ResponseEntity<>("Restaurant Update Failed", HttpStatus.BAD_REQUEST);
-//    }
 
     // delete restaurant - admin
     @DeleteMapping("/admin/api/restaurants/{id}")
