@@ -52,7 +52,7 @@ public class Menuitem {
     @NotEmpty(message = "dietary info cannot be empty")
     private String dietaryInfo;
 
-    @OneToMany(mappedBy = "menuitem")
+    @OneToMany(mappedBy = "menuitem", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Review> reviews;
 
     @Nullable

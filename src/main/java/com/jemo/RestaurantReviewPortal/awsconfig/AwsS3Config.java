@@ -7,6 +7,7 @@ import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.s3.S3Client;
 
+
 @Configuration
 public class AwsS3Config {
     // for local environment
@@ -35,7 +36,7 @@ public class AwsS3Config {
                                 System.getenv("AWS_REGION")
 
                                 // for local environment
-                                // dotenv.get("AWS_REGION"))
+//                                 dotenv.get("AWS_REGION")
                         ))
                 .credentialsProvider(StaticCredentialsProvider.create(credentials))
                 .build();
